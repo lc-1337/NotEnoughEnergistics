@@ -1,6 +1,7 @@
 package com.github.vfyjxf.nee.client;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

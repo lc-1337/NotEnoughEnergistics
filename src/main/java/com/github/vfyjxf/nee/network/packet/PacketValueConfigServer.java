@@ -3,17 +3,13 @@ package com.github.vfyjxf.nee.network.packet;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.p455w0rd.wirelesscraftingterminal.common.container.ContainerWirelessCraftingTerminal;
-import net.p455w0rd.wirelesscraftingterminal.helpers.WirelessTerminalGuiObject;
 
 import com.github.vfyjxf.nee.block.tile.TilePatternInterface;
 import com.github.vfyjxf.nee.container.ContainerPatternInterface;
-import com.github.vfyjxf.nee.network.NEENetworkHandler;
+import com.github.vfyjxf.nee.utils.GuiUtils;
 
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNode;
-import appeng.api.networking.security.IActionHost;
-import appeng.container.AEBaseContainer;
 import appeng.container.slot.SlotRestrictedInput;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -75,44 +71,23 @@ public class PacketValueConfigServer implements IMessage {
                     tile.updateCraftingList();
                 }
             } else if ("PatternInterface.check".equals(message.name)) {
-                if (container instanceof AEBaseContainer) {
-                    IGrid grid = message.getNetwork((AEBaseContainer) container);
-                    if (grid != null) {
+                final IGrid grid = GuiUtils.getGrid(container);
 
-                        for (IGridNode gridNode : grid.getMachines(TilePatternInterface.class)) {
+                if (grid != null) {
 
-                            if (gridNode.getMachine() instanceof TilePatternInterface) {
-                                NEENetworkHandler.getInstance()
-                                        .sendTo(new PacketValueConfigClient("PatternInterface.check", "true"), player);
-                                return null;
-                            }
+                    for (IGridNode gridNode : grid.getMachines(TilePatternInterface.class)) {
+                        if (gridNode.getMachine() instanceof TilePatternInterface) {
+                            return new PacketValueConfigClient("PatternInterface.check", true);
                         }
-
-                        NEENetworkHandler.getInstance()
-                                .sendTo(new PacketValueConfigClient("PatternInterface.check", "false"), player);
                     }
+
+                    return new PacketValueConfigClient("PatternInterface.check", false);
                 }
             }
 
             return null;
         }
+
     }
 
-    private IGrid getNetwork(AEBaseContainer container) {
-        if (container.getTarget() instanceof IActionHost) {
-            IActionHost ah = (IActionHost) container.getTarget();
-            IGridNode gn = ah.getActionableNode();
-            return gn.getGrid();
-        }
-        return null;
-    }
-
-    private IGrid getNetwork(ContainerWirelessCraftingTerminal container) {
-
-        if (container.getTarget() instanceof WirelessTerminalGuiObject) {
-            return ((WirelessTerminalGuiObject) container.getTarget()).getTargetGrid();
-        }
-
-        return null;
-    }
 }

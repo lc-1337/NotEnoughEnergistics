@@ -4,10 +4,9 @@ import com.github.vfyjxf.nee.NotEnoughEnergistics;
 import com.github.vfyjxf.nee.network.packet.PacketArcaneRecipe;
 import com.github.vfyjxf.nee.network.packet.PacketCraftingRequest;
 import com.github.vfyjxf.nee.network.packet.PacketExtremeRecipe;
+import com.github.vfyjxf.nee.network.packet.PacketNEIBookmark;
 import com.github.vfyjxf.nee.network.packet.PacketNEIPatternRecipe;
-import com.github.vfyjxf.nee.network.packet.PacketOpenCraftAmount;
 import com.github.vfyjxf.nee.network.packet.PacketOpenGui;
-import com.github.vfyjxf.nee.network.packet.PacketSetRecipe;
 import com.github.vfyjxf.nee.network.packet.PacketSlotStackChange;
 import com.github.vfyjxf.nee.network.packet.PacketStackCountChange;
 import com.github.vfyjxf.nee.network.packet.PacketValueConfigClient;
@@ -23,6 +22,10 @@ public class NEENetworkHandler {
 
     private static int nextId() {
         return packId++;
+    }
+
+    private NEENetworkHandler() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static SimpleNetworkWrapper getInstance() {
@@ -52,13 +55,8 @@ public class NEENetworkHandler {
                 PacketCraftingRequest.class,
                 nextId(),
                 Side.SERVER);
-        INSTANCE.registerMessage(
-                PacketOpenCraftAmount.Handler.class,
-                PacketOpenCraftAmount.class,
-                nextId(),
-                Side.SERVER);
+        INSTANCE.registerMessage(PacketNEIBookmark.Handler.class, PacketNEIBookmark.class, nextId(), Side.SERVER);
         INSTANCE.registerMessage(PacketOpenGui.Handler.class, PacketOpenGui.class, nextId(), Side.SERVER);
-        INSTANCE.registerMessage(PacketSetRecipe.Handler.class, PacketSetRecipe.class, nextId(), Side.SERVER);
         INSTANCE.registerMessage(
                 PacketValueConfigServer.Handler.class,
                 PacketValueConfigServer.class,

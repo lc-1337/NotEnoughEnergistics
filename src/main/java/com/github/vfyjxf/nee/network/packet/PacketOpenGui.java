@@ -1,7 +1,6 @@
 package com.github.vfyjxf.nee.network.packet;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 
 import com.github.vfyjxf.nee.network.NEEGuiHandler;
@@ -37,15 +36,16 @@ public class PacketOpenGui implements IMessage {
 
         @Override
         public IMessage onMessage(PacketOpenGui message, MessageContext ctx) {
-            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-            Container container = player.openContainer;
-            if (container instanceof AEBaseContainer) {
-                final ContainerOpenContext context = ((AEBaseContainer) container).getOpenContext();
+            final EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+
+            if (player.openContainer instanceof AEBaseContainer baseContainer) {
+                final ContainerOpenContext context = baseContainer.getOpenContext();
                 if (context != null) {
                     final TileEntity tile = context.getTile();
                     NEEGuiHandler.openGui(player, message.guiId, tile, context.getSide());
                 }
             }
+
             return null;
         }
     }

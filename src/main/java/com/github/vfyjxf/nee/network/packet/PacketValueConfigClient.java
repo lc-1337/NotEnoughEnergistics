@@ -3,8 +3,7 @@ package com.github.vfyjxf.nee.network.packet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 
-import com.github.vfyjxf.nee.nei.NEECraftingHelper;
-import com.github.vfyjxf.nee.utils.GuiUtils;
+import com.github.vfyjxf.nee.nei.NEECraftingPreviewHandler;
 
 import codechicken.nei.recipe.GuiRecipe;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -22,30 +21,30 @@ import io.netty.buffer.ByteBuf;
 public class PacketValueConfigClient implements IMessage {
 
     private String name;
-    private String value;
+    private boolean value;
 
     public PacketValueConfigClient() {}
 
-    public PacketValueConfigClient(String name, String value) {
+    public PacketValueConfigClient(String name, boolean value) {
         this.name = name;
         this.value = value;
     }
 
     public PacketValueConfigClient(String name) {
         this.name = name;
-        this.value = "";
+        this.value = false;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.name = ByteBufUtils.readUTF8String(buf);
-        this.value = ByteBufUtils.readUTF8String(buf);
+        this.value = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeUTF8String(buf, this.name);
-        ByteBufUtils.writeUTF8String(buf, this.value);
+        buf.writeBoolean(this.value);
     }
 
     public static final class Handler implements IMessageHandler<PacketValueConfigClient, IMessage> {
@@ -60,15 +59,10 @@ public class PacketValueConfigClient implements IMessage {
 
         @SideOnly(Side.CLIENT)
         private void handMessage(PacketValueConfigClient message, MessageContext ctx) {
-            GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-            if ("PatternInterface.check".equals(message.name)) {
-                if (gui instanceof GuiRecipe) {
-                    GuiRecipe guiRecipe = (GuiRecipe) gui;
-                    if (GuiUtils.isGuiCraftingTerm(guiRecipe.firstGui)) {
-                        boolean value = Boolean.parseBoolean(message.value);
-                        NEECraftingHelper.setIsPatternInterfaceExists(value);
-                    }
-                }
+            final GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+
+            if ("PatternInterface.check".equals(message.name) && gui instanceof GuiRecipe<?>) {
+                NEECraftingPreviewHandler.instance.setIsPatternInterfaceExists(message.value);
             }
         }
     }

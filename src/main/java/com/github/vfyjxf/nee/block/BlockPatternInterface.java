@@ -39,7 +39,7 @@ public class BlockPatternInterface extends AEBaseTileBlock {
             return false;
         }
 
-        TilePatternInterface tile = this.getTileEntity(world, x, y, z);
+        final TilePatternInterface tile = this.getTileEntity(world, x, y, z);
         if (tile != null) {
             if (!world.isRemote) {
                 NEEGuiHandler.openGui(player, NEEGuiHandler.PATTERN_INTERFACE_ID, tile, ForgeDirection.UNKNOWN);

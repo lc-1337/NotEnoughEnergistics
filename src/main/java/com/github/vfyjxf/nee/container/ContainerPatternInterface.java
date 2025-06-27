@@ -27,7 +27,6 @@ import appeng.util.Platform;
 
 public class ContainerPatternInterface extends AEBaseContainer implements IAEAppEngInventory {
 
-    private final InventoryPlayer playerInventory;
     private final AppEngInternalInventory recipeInv;
     private final AppEngInternalInventory patterns;
     private final SlotRestrictedInput[] patternSlots = new SlotRestrictedInput[9];
@@ -38,7 +37,6 @@ public class ContainerPatternInterface extends AEBaseContainer implements IAEApp
 
     public ContainerPatternInterface(InventoryPlayer playerInventory, TilePatternInterface tile) {
         super(playerInventory, tile);
-        this.playerInventory = playerInventory;
         this.recipeInv = tile.getGirdInventory();
         this.patterns = tile.getPatternInventory();
 

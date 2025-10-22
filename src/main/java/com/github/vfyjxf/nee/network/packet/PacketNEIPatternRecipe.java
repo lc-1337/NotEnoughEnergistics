@@ -158,8 +158,16 @@ public class PacketNEIPatternRecipe implements IMessage {
                 var input = new Int2ObjectOpenHashMap<IAEStack<?>>();
                 var output = new Int2ObjectOpenHashMap<IAEStack<?>>();
 
-                final ItemStack[] recipeInput = getMatrix(message.input, INPUT_KEY, 16);
-                final ItemStack[] recipeOutput = getMatrix(message.output, OUTPUT_KEY, 4);
+                final ItemStack[] recipeInput = getMatrix(
+                        message.input,
+                        INPUT_KEY,
+                        container.getPatternInputsWidth() * container.getPatternInputsHeigh()
+                                * container.getPatternInputPages());
+                final ItemStack[] recipeOutput = getMatrix(
+                        message.output,
+                        OUTPUT_KEY,
+                        container.getPatternOutputsWidth() * container.getPatternOutputsHeigh()
+                                * container.getPatternOutputPages());
 
                 for (int i = 0; i < recipeInput.length; i++) {
                     final ItemStack nextStack = recipeInput[i];
@@ -180,7 +188,7 @@ public class PacketNEIPatternRecipe implements IMessage {
                 }
 
                 container.receiveSlotStacks(StorageName.CRAFTING_INPUT, input);
-                container.receiveSlotStacks(StorageName.CRAFTING_INPUT, output);
+                container.receiveSlotStacks(StorageName.CRAFTING_OUTPUT, output);
             }
         }
     }

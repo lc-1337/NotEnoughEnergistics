@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nonnull;
 
+import appeng.api.storage.data.IAEStack;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -434,9 +435,9 @@ public class TilePatternInterface extends AENetworkInvTile
 
                 for (ICraftingCPU cpu : cpuSet) {
                     if (cpu instanceof CraftingCPUCluster cluster) {
-                        final IItemList<IAEItemStack> pendingList = AEApi.instance().storage().createItemList();
+                        final IItemList<IAEStack<?>> pendingList = AEApi.instance().storage().createAEStackList();
                         cluster.getListOfItem(pendingList, CraftingItemList.PENDING);
-                        for (IAEItemStack pendingStack : pendingList) {
+                        for (IAEStack<?> pendingStack : pendingList) {
                             if (pendingStack.isSameType(result)) {
                                 cluster.cancel();
                                 break;
@@ -667,7 +668,7 @@ public class TilePatternInterface extends AENetworkInvTile
         try {
             final ICraftingGrid cg = this.getProxy().getCrafting();
             final ImmutableSet<ICraftingCPU> cpuSet = cg.getCpus();
-            final IItemList<IAEItemStack> pendingList = AEApi.instance().storage().createItemList();
+            final IItemList<IAEStack<?>> pendingList = AEApi.instance().storage().createAEStackList();
 
             for (ICraftingCPU cpu : cpuSet) {
                 if (cpu instanceof CraftingCPUCluster cluster) {
@@ -675,7 +676,7 @@ public class TilePatternInterface extends AENetworkInvTile
                 }
             }
 
-            for (IAEItemStack pendingStack : pendingList) {
+            for (IAEStack<?> pendingStack : pendingList) {
                 if (pendingStack.isSameType(stack)) {
                     return false;
                 }

@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nonnull;
 
-import appeng.api.storage.data.IAEStack;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -45,6 +44,7 @@ import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
 import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.api.util.AECableType;
 import appeng.api.util.DimensionalCoord;
@@ -436,7 +436,7 @@ public class TilePatternInterface extends AENetworkInvTile
                 for (ICraftingCPU cpu : cpuSet) {
                     if (cpu instanceof CraftingCPUCluster cluster) {
                         final IItemList<IAEStack<?>> pendingList = AEApi.instance().storage().createAEStackList();
-                        cluster.getListOfItem(pendingList, CraftingItemList.PENDING);
+                        cluster.getModernListOfItem(pendingList, CraftingItemList.PENDING);
                         for (IAEStack<?> pendingStack : pendingList) {
                             if (pendingStack.isSameType(result)) {
                                 cluster.cancel();
@@ -672,7 +672,7 @@ public class TilePatternInterface extends AENetworkInvTile
 
             for (ICraftingCPU cpu : cpuSet) {
                 if (cpu instanceof CraftingCPUCluster cluster) {
-                    cluster.getListOfItem(pendingList, CraftingItemList.PENDING);
+                    cluster.getModernListOfItem(pendingList, CraftingItemList.PENDING);
                 }
             }
 

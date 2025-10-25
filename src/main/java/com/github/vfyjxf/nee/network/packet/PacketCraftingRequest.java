@@ -1,6 +1,5 @@
 package com.github.vfyjxf.nee.network.packet;
 
-import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
@@ -9,17 +8,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.p455w0rd.wirelesscraftingterminal.common.WCTGuiHandler;
 import net.p455w0rd.wirelesscraftingterminal.reference.Reference;
 
 import com.github.vfyjxf.nee.block.tile.TilePatternInterface;
 import com.github.vfyjxf.nee.utils.GuiUtils;
 import com.github.vfyjxf.nee.utils.ModIDs;
-import com.glodblock.github.inventory.InventoryHandler;
-import com.glodblock.github.inventory.gui.GuiType;
-import com.glodblock.github.inventory.item.IWirelessTerminal;
-import com.glodblock.github.util.BlockPos;
 
 import appeng.api.AEApi;
 import appeng.api.config.CraftingMode;
@@ -248,8 +242,6 @@ public class PacketCraftingRequest implements IMessage {
         } else if (container instanceof AEBaseContainer baseContainer) {
             if (Loader.isModLoaded(ModIDs.ThE) && this.modID.equals(ModIDs.ThE)) {
                 openTHContainerCraftConfirm(grid, requireToCraftStack, (IActionHost) baseContainer.getTarget(), player);
-            } else if (Loader.isModLoaded(ModIDs.FC) && this.modID.equals(ModIDs.FC)) {
-                openFCContainerCraftConfirm(baseContainer, grid, requireToCraftStack, player);
             } else if (Loader.isModLoaded(ModIDs.WCT) && this.modID.equals(ModIDs.WCT)) {
                 openWCTContainerCraftConfirm(baseContainer, grid, requireToCraftStack, player);
             } else {
@@ -318,34 +310,6 @@ public class PacketCraftingRequest implements IMessage {
                 job -> {
                     ThEGuiHandler.launchGui(ThEGuiHandler.AUTO_CRAFTING_CONFIRM, player, player.worldObj, 0, 0, 0);
                 });
-
-    }
-
-    @Optional.Method(modid = ModIDs.FC)
-    private void openFCContainerCraftConfirm(AEBaseContainer baseContainer, IGrid grid,
-            IAEItemStack requireToCraftStack, EntityPlayerMP player) {
-
-        openContainerCraftConfirm(grid, requireToCraftStack, player, baseContainer.getActionSource(), job -> {
-            final ContainerOpenContext openContext = baseContainer.getOpenContext();
-            final TileEntity tileEntity = openContext.getTile();
-
-            if (tileEntity != null) {
-                InventoryHandler.openGui(
-                        player,
-                        player.worldObj,
-                        new BlockPos(tileEntity),
-                        Objects.requireNonNull(openContext.getSide()),
-                        GuiType.FLUID_CRAFTING_CONFIRM);
-            } else if (baseContainer.getTarget() instanceof IWirelessTerminal wireless) {
-                InventoryHandler.openGui(
-                        player,
-                        player.worldObj,
-                        new BlockPos(wireless.getInventorySlot(), 0, 0),
-                        Objects.requireNonNull(openContext.getSide()),
-                        GuiType.FLUID_CRAFTING_CONFIRM_ITEM);
-            }
-
-        });
 
     }
 

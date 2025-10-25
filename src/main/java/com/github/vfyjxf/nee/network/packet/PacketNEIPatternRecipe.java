@@ -12,8 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.github.vfyjxf.nee.utils.GuiUtils;
 import com.github.vfyjxf.nee.utils.ItemUtils;
-import com.github.vfyjxf.nee.utils.ModIDs;
-import com.glodblock.github.client.gui.container.ContainerFluidPatternTerminal;
 
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridNode;
@@ -27,7 +25,6 @@ import appeng.helpers.IContainerCraftingPacket;
 import appeng.util.item.AEFluidStack;
 import appeng.util.item.AEItemStack;
 import codechicken.nei.recipe.StackInfo;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -92,8 +89,6 @@ public class PacketNEIPatternRecipe implements IMessage {
 
             if (container instanceof ContainerPatternTerm cpt) {
                 cpt.getPatternTerminal().setCraftingRecipe(craftingMode);
-            } else if (Loader.isModLoaded(ModIDs.FC) && container instanceof ContainerFluidPatternTerminal cfpt) {
-                cfpt.getPatternTerminal().setCraftingRecipe(craftingMode);
             }
 
         }

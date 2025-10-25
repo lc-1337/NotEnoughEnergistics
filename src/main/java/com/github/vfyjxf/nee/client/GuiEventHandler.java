@@ -34,10 +34,7 @@ import com.github.vfyjxf.nee.network.packet.PacketStackCountChange;
 import com.github.vfyjxf.nee.network.packet.PacketValueConfigServer;
 import com.github.vfyjxf.nee.utils.GuiUtils;
 import com.github.vfyjxf.nee.utils.ItemUtils;
-import com.github.vfyjxf.nee.utils.ModIDs;
 import com.glodblock.github.client.gui.GuiLevelMaintainer;
-import com.glodblock.github.client.gui.base.FCGuiEncodeTerminal;
-import com.glodblock.github.client.gui.container.base.FCContainerEncodeTerminal;
 
 import appeng.api.events.GuiScrollEvent;
 import appeng.client.gui.AEBaseGui;
@@ -96,10 +93,6 @@ public class GuiEventHandler extends INEIGuiAdapter implements IContainerTooltip
 
     private boolean isGuiPatternTerm(GuiScreen guiScreen) {
         if (guiScreen instanceof GuiContainer guiContainer) {
-
-            if (Loader.isModLoaded(ModIDs.FC) && guiContainer instanceof FCGuiEncodeTerminal) {
-                return false;
-            }
 
             return RecipeInfo.getOverlayHandler(guiContainer, "crafting") instanceof NEEPatternTerminalHandler
                     || RecipeInfo.getOverlayHandler(guiContainer, "smelting") instanceof NEEPatternTerminalHandler;
@@ -179,8 +172,6 @@ public class GuiEventHandler extends INEIGuiAdapter implements IContainerTooltip
 
         if (container instanceof ContainerPatternTerm) {
             return ((ContainerPatternTerm) container).isCraftingMode();
-        } else if (Loader.isModLoaded(ModIDs.FC) && container instanceof FCContainerEncodeTerminal) {
-            return ((FCContainerEncodeTerminal) container).isCraftingMode();
         }
 
         return false;
